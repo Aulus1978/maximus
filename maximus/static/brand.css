@@ -1,0 +1,109 @@
+.sidebar .brand-logo {
+  display: block;
+  position: relative;
+  z-index: 1;
+  flex: 0 0 auto;
+  margin: -28px -18px 0;
+  padding: 18px 22px;
+  overflow: hidden;
+  line-height: 0;
+  background: #f4f3ef;
+  border-bottom: 1px solid #d5d7d3;
+}
+
+.sidebar nav {
+  min-height: 0;
+}
+
+.nav-branch summary {
+  list-style: none;
+  cursor: pointer;
+  position: relative;
+  padding: 9px 26px 9px 10px;
+  border-radius: 3px;
+  color: #aeb8bd;
+}
+
+.nav-branch summary::-webkit-details-marker {
+  display: none;
+}
+
+.nav-branch summary::after {
+  content: "+";
+  position: absolute;
+  right: 10px;
+}
+
+.nav-branch[open] > summary::after {
+  content: "−";
+}
+
+.nav-branch summary:hover,
+.nav-branch summary.active {
+  background: #2b363d;
+  color: #fff;
+}
+
+.nav-branch.nested {
+  margin-left: 10px;
+  border-left: 1px solid #354047;
+}
+
+.nav-branch.nested > summary {
+  padding-left: 14px;
+  font-size: 12px;
+}
+
+.nav-journey-links {
+  padding: 4px 0 7px 10px;
+}
+
+.sidebar nav .nav-journey-links > a {
+  display: block;
+  margin: 1px 0;
+  padding: 6px 8px;
+  border-radius: 3px;
+  color: #839097;
+  font-size: 9px;
+  line-height: 1.35;
+}
+
+.sidebar nav .nav-journey-links > a:hover,
+.sidebar nav .nav-journey-links > a.active {
+  background: #243039;
+  color: #7ee0c3;
+}
+
+.topbar {
+  background: var(--paper);
+}
+
+.brand-logo img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.brand-symbol {
+  display: block;
+  overflow: hidden;
+  aspect-ratio: 480 / 235;
+}
+
+.brand-word {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 480 / 85;
+}
+
+.brand-word img {
+  position: absolute;
+  top: -276.47%;
+  left: 1.67%;
+}
+
+@media (max-height: 760px) and (min-width: 761px) {
+  .sidebar .brand-logo { padding: 12px 22px; }
+  .sidebar nav { padding-top: 10px; }
+}

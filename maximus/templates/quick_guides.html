@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}Guias Rápidos · MAXIMUS{% endblock %}
+{% block content %}
+<section class="library-hero quick-guides-hero">
+  <span class="eyebrow">CONHECIMENTO VISUAL</span>
+  <h1>Guias Rápidos</h1>
+  <p>Abra e consulte os infográficos diretamente nesta página.</p>
+</section>
+
+<section class="quick-guides-list" aria-labelledby="guias-publicados">
+  <div class="section-head">
+    <div><span class="eyebrow">VISUALIZAÇÃO</span><h2 id="guias-publicados">Guias publicados</h2></div>
+    <small>{{ guides|length }} guia(s)</small>
+  </div>
+  <div class="quick-guide-viewers">
+    {% for guide in guides %}
+    <article class="quick-guide-card">
+      <header class="quick-guide-body">
+        <div><span class="eyebrow">GUIA RÁPIDO · PDF</span><h3>{{ guide.title }}</h3>{% if guide.description %}<p>{{ guide.description }}</p>{% endif %}</div>
+        <div class="quick-guide-meta"><small>{{ guide.original_filename }} · {{ '%.1f'|format(guide.file_size / 1048576) }} MB</small><div class="quick-guide-actions"><a class="button small" href="{{ url_for('main.quick_guide_pdf', guide_id=guide.id) }}" target="_blank" rel="noopener">Abrir em tela cheia</a><a href="{{ url_for('main.quick_guide_pdf', guide_id=guide.id, download=1) }}">Baixar</a></div></div>
+      </header>
+      <div class="quick-guide-preview"><iframe src="{{ url_for('main.quick_guide_pdf', guide_id=guide.id) }}#toolbar=1&navpanes=0&view=FitH" title="Visualização de {{ guide.title }}" loading="lazy"></iframe></div>
+    </article>
+    {% else %}
+    <div class="empty-state"><h3>Nenhum guia publicado ainda.</h3><p>Quando um PDF for adicionado, ele será exibido aqui para leitura direta.</p></div>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="quick-guide-upload" id="adicionar-guia">
+  <div><span class="eyebrow">NOVO MATERIAL</span><h2>Adicionar um guia</h2><p>O novo PDF será incluído na área de visualização acima.</p></div>
+  <form method="post" enctype="multipart/form-data">
+    <label>Título<input name="title" required maxlength="160" placeholder="Ex.: AS-IS → TO-BE"></label>
+    <label>Descrição<textarea name="description" rows="3" maxlength="600" placeholder="Breve resumo do assunto"></textarea></label>
+    <label>Arquivo PDF<input type="file" name="pdf" accept="application/pdf,.pdf" required></label>
+    <button type="submit">Publicar PDF</button>
+  </form>
+</section>
+{% endblock %}

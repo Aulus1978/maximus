@@ -1,0 +1,32 @@
+<!doctype html><html lang="pt-BR"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{% block title %}MAXIMUS{% endblock %}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static',filename='style.css') }}"><link rel="stylesheet" href="{{ url_for('static',filename='structure.css') }}"><link rel="stylesheet" href="{{ url_for('static',filename='legacy-structure.css') }}"><link rel="stylesheet" href="{{ url_for('static',filename='notes.css') }}"><link rel="stylesheet" href="{{ url_for('static',filename='brand.css') }}"><link rel="stylesheet" href="{{ url_for('static',filename='project.css') }}"><link rel="stylesheet" href="{{ url_for('static',filename='knowledge.css') }}"><script defer src="{{ url_for('static',filename='app.js') }}"></script>
+</head><body class="{% block body_class %}{% endblock %}">
+<aside class="sidebar" id="sidebar"><a class="brand brand-logo" href="{{ url_for('main.home') }}" aria-label="MAXIMUS — página inicial"><span class="brand-symbol"><img src="{{ url_for('static', filename='maximus-logo.webp') }}" alt=""></span><span class="brand-word"><img src="{{ url_for('static', filename='maximus-logo.webp') }}" alt=""></span></a>
+<nav><a class="{{ 'active' if request.endpoint=='main.home' }}" href="{{ url_for('main.home') }}">Visão geral</a><a class="{{ 'active' if request.endpoint=='main.consulting' }}" href="{{ url_for('main.consulting') }}">A Consultoria</a>
+<div class="nav-label">Metodologia</div>{% for m in nav_modules %}<a class="module-link {{ 'active' if request.view_args and request.view_args.get('slug')==m.slug }}" href="{{ url_for('main.module_detail',slug=m.slug) }}"><i style="background:{{m.color}}"></i>{{m.name}}<small>{{m.subtitle}}</small></a>{% endfor %}
+<div class="nav-label">Conhecimento e Estudos</div><a class="{{ 'active' if request.endpoint=='main.knowledge_index' }}" href="{{ url_for('main.knowledge_index') }}">Visão geral</a><a href="{{ url_for('main.knowledge_index') }}#areas">Áreas de conhecimento</a>
+<details class="nav-branch" {{'open' if request.endpoint=='main.knowledge_pmo'}}><summary>Jornadas de aprendizagem</summary><details class="nav-branch nested" {{'open' if request.endpoint=='main.knowledge_pmo'}}><summary class="{{'active' if request.endpoint=='main.knowledge_pmo'}}">PMO Academy</summary><div class="nav-journey-links">{% for item in range(1,13) %}<a data-pmo-nav="{{item}}" href="{{url_for('main.knowledge_pmo')}}#modulo-{{item}}">{{'%02d'|format(item)}} · {{['O que é um PMO','Tipos e alcance','Governança','Projeto, programa e portfólio','Ciclo e Stage-Gates','Métricas e valor','Tradicional, Agile e Hybrid','Capacidade, riscos e dependências','Maturidade do PMO','PMO moderno, EPMO e xMO','IA no PMO','Implantação em 100 dias'][item-1]}}</a>{% endfor %}</div></details></details>
+<a class="{{ 'active' if request.endpoint in ['main.library','main.study_detail'] }}" href="{{ url_for('main.library') }}">Estudos e Biblioteca</a><a class="nav-child {{ 'active' if request.endpoint in ['main.quick_guides','main.quick_guide_pdf'] }}" href="{{ url_for('main.quick_guides') }}">Guias Rápidos</a><a class="{{ 'active' if request.endpoint=='main.archive' }}" href="{{ url_for('main.archive') }}">Acervo Maximus</a><a class="{{ 'active' if request.endpoint=='main.recovered_inventory' }}" href="{{ url_for('main.recovered_inventory') }}">Inventário Recuperado</a>
+<div class="nav-label">Produto</div><a class="{{ 'active' if request.endpoint=='main.system_index' }}" href="{{ url_for('main.system_index') }}">Sistema Maximus</a></nav>
+<div class="sidebar-foot">Base metodológica <b>v0.1</b></div></aside>
+<main><header class="topbar"><button class="menu" data-menu>☰</button><span>Base digital da metodologia</span><a class="button small" href="{{ url_for('main.tool_new') }}">+ Ferramenta</a></header>
+<div class="page">{% with messages=get_flashed_messages(with_categories=true) %}{% for cat,msg in messages %}<div class="flash {{cat}}">{{msg}}</div>{% endfor %}{% endwith %}{% block content %}{% endblock %}
+<section class="page-notes" id="anotacoes-da-pagina">
+  <div class="page-notes-head">
+    <div><span class="eyebrow">ÁREA DE TRABALHO</span><h2>Anotações da página</h2></div>
+    {% if page_note %}<small>Última atualização: {{ page_note.updated_at }}</small>{% endif %}
+  </div>
+  <p>Registre aqui ajustes, ideias e alterações a serem feitas nesta página do projeto.</p>
+  <form method="post" action="{{ url_for('main.save_page_note') }}">
+    <input type="hidden" name="page_key" value="{{ request.path }}">
+    <input type="hidden" name="return_to" value="{{ request.full_path.rstrip('?') }}">
+    <textarea name="content" rows="6" placeholder="Ex.: alterar o título, revisar os indicadores, incluir um novo campo...">{{ page_note.content if page_note else '' }}</textarea>
+    <div class="page-notes-actions"><small>Anotação vinculada somente a esta página.</small><button type="submit">Salvar anotação</button></div>
+  </form>
+</section>
+</div>
+<footer>MAXIMUS · Método, conhecimento e transformação.</footer></main></body></html>

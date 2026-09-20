@@ -1,0 +1,26 @@
+.structure-flow { max-width: 1100px; margin: auto; }
+.position-card { background: #fff; border: 1px solid var(--line); border-left: 4px solid var(--module); }
+.position-card > header { display: flex; justify-content: space-between; gap: 20px; padding: 24px; }
+.position-card h3 { margin: 3px 0 7px; text-transform: uppercase; }
+.position-card header p, .subpositions p { color: var(--muted); margin: 0; font-size: 12px; }
+.flow-arrow { height: 38px; color: #8e9697; text-align: center; font-size: 24px; }
+.subpositions { display: grid; grid-template-columns: repeat(2, 1fr); border-top: 1px solid var(--line); }
+.subpositions > section { padding: 20px; border-right: 1px solid var(--line); }
+.subpositions > section:last-child { border-right: 0; }
+.subposition-head { display: flex; justify-content: space-between; }
+.subposition-head h4 { margin: 2px 0 7px; }
+.subposition-head small { color: var(--module); }
+.position-tools { display: grid; gap: 7px; margin: 15px 20px 20px; }
+.subpositions .position-tools { margin: 15px 0 0; }
+.position-tools > a { display: flex; flex-direction: column; padding: 11px; background: #f3f3ef; border: 1px solid #e3e5e2; transition: .15s; }
+.position-tools > a:hover { border-color: var(--module); transform: translateX(2px); }
+.position-tools small { color: var(--muted); font-size: 9px; }
+.position-tools span { color: var(--muted); font-size: 10px; }
+.position-card > footer { display: flex; gap: 20px; padding: 10px 20px; background: #f0f0ec; color: var(--muted); font-size: 9px; }
+.pending-position { margin-top: 30px; border-left-color: #9aa0a1; }
+
+@media (max-width: 760px) {
+  .subpositions { grid-template-columns: 1fr; }
+  .subpositions > section { border-right: 0; border-bottom: 1px solid var(--line); }
+  .position-card > header, .position-card > footer { flex-wrap: wrap; }
+}

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}Conhecimento e Estudos · MAXIMUS{% endblock %}
+{% block body_class %}knowledge-theme{% endblock %}
+{% block content %}
+<div class="knowledge-shell">
+  <section class="knowledge-hero">
+    <div><span class="knowledge-kicker">MAXIMUS · BASE DE CONHECIMENTO</span><h1>Conhecimento<br>em evolução.</h1><p>Um ambiente para organizar estudos, preservar projetos e transformar interesses em jornadas profissionais de aprendizagem.</p><div class="knowledge-actions"><a class="knowledge-button primary" href="#jornadas">Explorar jornadas</a><a class="knowledge-button" href="{{url_for('main.library')}}">Abrir biblioteca</a></div></div>
+    <div class="knowledge-map" aria-label="Dimensões da área"><span>Áreas</span><span>Jornadas</span><span>Estudos</span><span>Prática</span><span>Acervo</span><i></i></div>
+  </section>
+  <section class="knowledge-metrics"><article><strong>{{knowledge_areas|length}}</strong><span>áreas de conhecimento</span></article><article><strong>1</strong><span>jornada estruturada</span></article><article><strong>{{pmo_modules}}</strong><span>módulos PMO</span></article><article><strong>{{study_count}}</strong><span>estudos catalogados</span></article></section>
+  <section class="knowledge-section" id="areas"><header><div><span class="knowledge-kicker">MAPA DE INTERESSES</span><h2>Áreas de conhecimento</h2></div><p>Campos independentes que podem compartilhar referências, ferramentas e aplicações.</p></header><div class="knowledge-area-grid">{% for area in knowledge_areas %}<article class="knowledge-area" style="--area:{{area.color}}"><span>{{'%02d'|format(loop.index)}}</span><h3>{{area.name}}</h3><p>{{area.description}}</p><small>{{area.status}}</small>{% if area.slug=='pmo' %}<a href="{{url_for('main.knowledge_pmo')}}" aria-label="Abrir Gestão de Projetos e PMO">→</a>{% endif %}</article>{% endfor %}</div></section>
+  <section class="knowledge-section" id="jornadas"><header><div><span class="knowledge-kicker">APRENDIZAGEM ORIENTADA</span><h2>Jornadas de aprendizagem</h2></div><p>Sequências progressivas que conectam conceitos, prática, avaliação e referências.</p></header><a class="journey-feature" href="{{url_for('main.knowledge_pmo')}}"><div><span class="knowledge-kicker">JORNADA 01 · DISPONÍVEL</span><h3>PMO Academy</h3><p>Do básico à estratégia e IA: uma formação visual em governança, portfólio, valor e evolução do PMO.</p><div class="journey-tags"><span>Fundamentos</span><span>Operação</span><span>Evolução</span><span>12 módulos</span></div></div><strong>Iniciar jornada <b>→</b></strong></a></section>
+  <section class="knowledge-section knowledge-links"><a href="{{url_for('main.library')}}"><span>ESTUDOS</span><h3>Biblioteca</h3><p>Artigos, sínteses, referências e conexões com a metodologia.</p></a><a href="{{url_for('main.archive')}}"><span>PATRIMÔNIO INTELECTUAL</span><h3>Acervo Maximus</h3><p>Produção própria, documentos históricos e projetos resgatados.</p></a><a href="{{url_for('main.recovered_inventory')}}"><span>RECUPERAÇÃO</span><h3>Inventário</h3><p>Acompanhamento dos materiais antigos em catalogação.</p></a></section>
+</div>
+{% endblock %}

@@ -1,0 +1,2 @@
+{% extends 'base.html' %}{% block content %}<div class="page-title"><span class="eyebrow">METODOLOGIA</span><h1>Uma estrutura, seis perspectivas</h1><p>Os módulos organizam ferramentas, evidências históricas, gaps e capacidades do Sistema Maximus.</p></div><section class="module-grid">{% for m in modules %}<a class="module-card" style="--module:{{m.color}}" href="{{url_for('main.module_detail',slug=m.slug)}}"><h3>{{m.name}}</h3><p>{{m.subtitle}}</p><small>{{m.description}}</small></a>{% endfor %}</section>{% endblock %}
+

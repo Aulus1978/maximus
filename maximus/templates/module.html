@@ -1,0 +1,77 @@
+{% extends 'base.html' %}{% block title %}{{module.name}} · MAXIMUS{% endblock %}{% block content %}
+<section class="module-hero" style="--module:{{module.color}}"><div><span class="eyebrow">MÓDULO {{'%02d'|format(module.sort_order)}}</span><h1>{{module.name}}</h1><h2>{{module.subtitle}}</h2><p>{{module.description}}</p></div><div class="status-seal"><span>Status geral</span><b>Em evolução</b><small>{{stats.operational}} capacidades operacionais</small></div></section>
+<section class="metrics compact"><article><small>Recuperadas</small><strong>{{stats.identified}}</strong></article><article><small>Confirmadas</small><strong>{{stats.confirmed}}</strong></article><article><small>Em validação</small><strong>{{stats.under_review}}</strong></article><article><small>Digitalizadas</small><strong>{{stats.digitized}}</strong></article><article><small>Operacionais</small><strong>{{stats.operational}}</strong></article><article><small>Gaps metodológicos</small><strong>{{gaps|length}}</strong></article></section>
+<section class="progress-inline">{% for label,key in [('Recuperação','recovery'),('Digitalização','digitalization'),('Produto operacional','operational')] %}<div><span>{{label}} <b>{{progress[key]}}%</b></span><div class="bar"><i style="width:{{progress[key]}}%;background:{{module.color}}"></i></div></div>{% endfor %}</section>
+<div class="section-head"><div><span class="eyebrow">ESTRUTURA DOS MÓDULOS · 02/11/2012</span><h2>Arquitetura do módulo</h2></div><a class="button" href="{{url_for('main.tool_new')}}?module={{module.id}}">Nova ferramenta</a></div>
+<nav class="view-tabs" aria-label="Visualização do módulo"><button type="button" class="active" data-view="structure">Estrutura</button><button type="button" data-view="matrix">Matriz</button><button type="button" data-view="side-by-side">Lado a lado</button><button type="button" data-view="inventory">Inventário</button></nav>
+<section class="module-view active" data-panel="structure">
+<p class="structure-intro">As posições seguem a Estrutura dos Módulos de 02/11/2012. A ausência de material recuperado nesta carga indica investigação pendente — não um gap metodológico.</p>
+<div class="structure-flow">
+{% for position in position_roots %}
+<article class="position-card {{'pending-position' if position.position_type=='pending'}}" style="--module:{{module.color}}">
+  <header><div><span class="position-code">{{position.code}}</span><h3>{{position.name}}</h3><p>{{position.module_function}}</p></div>{% if position.gap_count %}<a href="#gaps" class="gap-indicator">⚠ {{position.gap_count}} gap{{'s' if position.gap_count != 1}}</a>{% endif %}</header>
+  {% set direct_tools=tools_by_position.get(position.id,[]) %}
+  {% if direct_tools %}<div class="position-tools">{% for t in direct_tools %}<a href="{{url_for('main.tool_detail',module_slug=module.slug,tool_slug=t.slug)}}"><small>Original — {{'Confirmada' if t.validation_status=='confirmed' else 'Em validação'}}</small><b>{{t.name}}</b><span>{{t.source_filename or 'Evidência a registrar'}}</span></a>{% endfor %}</div>{% endif %}
+  {% set children=position_children.get(position.id,[]) %}
+  {% if children %}<div class="subpositions">{% for child in children %}<section><div class="subposition-head"><div><small>{{child.code}}</small><h4>{{child.name}}</h4></div>{% if child.gap_count %}<a href="#gaps" class="gap-indicator">⚠ {{child.gap_count}}</a>{% endif %}</div><p>{{child.module_function}}</p><div class="position-tools">{% for t in tools_by_position.get(child.id,[]) %}<a href="{{url_for('main.tool_detail',module_slug=module.slug,tool_slug=t.slug)}}"><small>Original — {{'Confirmada' if t.validation_status=='confirmed' else 'Em validação'}}</small><b>{{t.name}}</b><span>{{t.source_filename or 'Evidência a registrar'}}</span></a>{% else %}<span class="position-empty">Material ainda em investigação.</span>{% endfor %}</div></section>{% endfor %}</div>{% endif %}
+  <footer><span>{{position.tool_count}} ferramentas</span><span>{{position.existing}} existentes</span><span>{{position.digitized}} digitalizadas</span><span>{{position.operational}} operacionais</span></footer>
+</article>
+{% if position.code in ['1','2','3'] %}<div class="flow-arrow" aria-hidden="true">↓</div>{% endif %}
+{% endfor %}
+</div>
+</section>
+<section class="module-view" data-panel="matrix">
+<p class="structure-intro">Visão compacta das quatro etapas. Selecione um assunto para consultar sua função e as ferramentas relacionadas.</p>
+<div class="structure-matrix" style="--module:{{module.color}}">
+{% for position in position_roots if position.position_type != 'pending' %}
+<article class="matrix-column">
+  <header><span class="position-code">ETAPA {{position.code}}</span><h3>{{position.name}}</h3><p>{{position.module_function}}</p><div><b>{{position.tool_count}}</b> ferramentas{% if position.gap_count %}<a href="#gaps" class="gap-indicator">⚠ {{position.gap_count}} gap{{'s' if position.gap_count != 1}}</a>{% endif %}</div></header>
+  <div class="matrix-subjects">
+    {% set direct_tools=tools_by_position.get(position.id,[]) %}
+    {% if direct_tools %}<details class="matrix-topic"><summary>Ferramentas da etapa <span>{{direct_tools|length}}</span></summary><div class="topic-content"><p>{{position.module_function}}</p><div class="topic-tools">{% for t in direct_tools %}<a href="{{url_for('main.tool_detail',module_slug=module.slug,tool_slug=t.slug)}}">{{t.name}} <small>→</small></a>{% endfor %}</div></div></details>{% endif %}
+    {% for child in position_children.get(position.id,[]) %}<details class="matrix-topic" {{'open' if module.slug=='diamond' and child.code=='3.4'}}><summary><span><small>{{child.code}}</small>{{child.name}}</span><b>{{child.tool_count}}</b></summary><div class="topic-content"><p>{{child.module_function}}</p><div class="topic-tools">{% for t in tools_by_position.get(child.id,[]) %}<a href="{{url_for('main.tool_detail',module_slug=module.slug,tool_slug=t.slug)}}">{{t.name}} <small>→</small></a>{% else %}<em>Material ainda em investigação.</em>{% endfor %}</div>{% if child.gap_count %}<a href="#gaps" class="gap-indicator">⚠ {{child.gap_count}} gap{{'s' if child.gap_count != 1}}</a>{% endif %}</div></details>{% endfor %}
+    {% if not direct_tools and not position_children.get(position.id,[]) %}<span class="position-empty">Conteúdo em estruturação.</span>{% endif %}
+  </div>
+  <footer><span>{{position.existing}} existentes</span><span>{{position.operational}} operacionais</span></footer>
+</article>
+{% endfor %}
+</div>
+{% for position in position_roots if position.position_type == 'pending' %}{% if position.tool_count %}<details class="pending-matrix" style="--module:{{module.color}}"><summary><span><small>{{position.code}}</small>{{position.name}}</span><b>{{position.tool_count}} itens a classificar</b></summary><div class="topic-tools">{% for t in tools_by_position.get(position.id,[]) %}<a href="{{url_for('main.tool_detail',module_slug=module.slug,tool_slug=t.slug)}}">{{t.name}} <small>→</small></a>{% endfor %}</div></details>{% endif %}{% endfor %}
+</section>
+<section class="module-view" data-panel="side-by-side">
+<p class="structure-intro">Visão vertical da estrutura dos módulos, organizados lado a lado.</p>
+<div class="side-scrollbar" data-side-scrollbar aria-label="Rolagem horizontal dos módulos"><div style="width:{{comparison_modules|length * 262}}px"></div></div>
+<div class="side-by-side-wrap" data-side-content>
+  <div class="side-by-side-modules" style="grid-template-columns:repeat({{comparison_modules|length}},minmax(250px,1fr));min-width:{{comparison_modules|length * 262}}px">
+  {% for comparison_module in comparison_modules %}
+  <article class="side-module-column" style="--module:{{comparison_module.color}}">
+    <header><span class="position-code">MÓDULO {{'%02d'|format(comparison_module.sort_order)}}</span><h3>{{comparison_module.name}}</h3><p>{{comparison_module.subtitle}}</p></header>
+    <div class="side-module-positions">
+    {% for position in comparison_roots.get(comparison_module.id,[]) if position.position_type != 'pending' %}
+      <section class="side-position">
+        <div><span class="position-code">ETAPA {{position.code}}</span><b>{{position.name}}</b><p>{{position.module_function}}</p></div>
+        <details class="side-details">
+          <summary>Ver detalhamento <span aria-hidden="true">+</span></summary>
+          <div class="side-details-content">
+            {% set direct_comparison_tools=comparison_tools_by_position.get(position.id,[]) %}
+            {% if direct_comparison_tools %}<div class="side-tools">{% for t in direct_comparison_tools %}<a href="{{url_for('main.tool_detail',module_slug=comparison_module.slug,tool_slug=t.slug)}}">{{t.name}} <small>→</small></a>{% endfor %}</div>{% endif %}
+            {% for child in comparison_children.get(position.id,[]) %}<div class="side-subposition"><small>{{child.code}}</small><strong>{{child.name}}</strong><p>{{child.module_function}}</p><div class="side-tools">{% for t in comparison_tools_by_position.get(child.id,[]) %}<a href="{{url_for('main.tool_detail',module_slug=comparison_module.slug,tool_slug=t.slug)}}">{{t.name}} <small>→</small></a>{% else %}<em>Material ainda em investigação.</em>{% endfor %}</div></div>{% endfor %}
+            {% if not direct_comparison_tools and not comparison_children.get(position.id,[]) %}<span class="position-empty">Conteúdo em estruturação.</span>{% endif %}
+          </div>
+        </details>
+        <footer>{{position.tool_count}} ferramentas</footer>
+      </section>
+    {% endfor %}
+    </div>
+  </article>
+  {% endfor %}
+  </div>
+</div>
+</section>
+<section class="module-view" data-panel="inventory">
+<div class="inventory-head"><div><span class="eyebrow">CATÁLOGO</span><h2>Inventário de ferramentas</h2></div></div>
+<form class="filters"><input name="q" value="{{request.args.get('q','')}}" placeholder="Buscar por nome ou descrição"><select name="validation_status"><option value="">Toda validação</option><option value="confirmed" {{'selected' if request.args.get('validation_status')=='confirmed'}}>Confirmada</option><option value="under_review" {{'selected' if request.args.get('validation_status')=='under_review'}}>Em validação</option></select><select name="status"><option value="">Todo status</option>{% for v in ['Original','Digitalizada','Operacional'] %}<option {{'selected' if request.args.get('status')==v}}>{{v}}</option>{% endfor %}</select><select name="category"><option value="">Toda categoria</option>{% for c in categories %}<option {{'selected' if request.args.get('category')==c.name}}>{{c.name}}</option>{% endfor %}</select><button>Filtrar</button></form>
+<div class="table-wrap"><table><thead><tr><th>Ferramenta</th><th>Posição</th><th>Validação</th><th>Existência</th><th>Evolução</th><th>Evidência</th></tr></thead><tbody>{% for t in tools %}<tr><td><a href="{{url_for('main.tool_detail',module_slug=module.slug,tool_slug=t.slug)}}"><b>{{t.name}}</b><span>{{t.summary}}</span></a></td><td>{{t.parent_position_name~' → ' if t.parent_position_name}}{{t.position_name or 'Pendente'}}</td><td><span class="badge validation-{{t.validation_status}}">{{'Confirmada' if t.validation_status=='confirmed' else 'Em validação'}}</span></td><td>{{t.existence_status or 'Em validação'}}</td><td><span class="badge status-{{t.status|lower}}">{{t.status}}</span></td><td>{{t.source_filename or '—'}}</td></tr>{% else %}<tr><td colspan="6" class="empty">Nenhuma ferramenta encontrada com estes filtros.</td></tr>{% endfor %}</tbody></table></div>
+</section>
+<div class="section-head" id="gaps"><div><span class="eyebrow">EVOLUÇÃO CONCEITUAL</span><h2>Gaps do módulo</h2></div><a class="button secondary" href="{{url_for('main.gap_new')}}?module={{module.id}}">Registrar gap</a></div><div class="gap-grid">{% for g in gaps %}<article class="gap-card"><div><span class="badge priority-{{g.priority|lower}}">{{g.priority}}</span><span class="badge neutral">{{g.situation}}</span>{% if g.position_name %}<span class="badge neutral">{{g.position_name}}</span>{% endif %}</div><h3>{{g.title}}</h3><p>{{g.description}}</p><dl><dt>Por que importa</dt><dd>{{g.reason}}</dd><dt>Possíveis ferramentas</dt><dd>{{g.future_tools or 'A definir'}}</dd>{% if g.generated_tool %}<dt>Ferramenta gerada</dt><dd>{{g.generated_tool}}</dd>{% endif %}</dl></article>{% endfor %}</div>
+{% endblock %}
