@@ -1,0 +1,749 @@
+{% extends 'base.html' %}{% block title %}Gabinete Macroeconômico · MAXIMUS{% endblock %}{% block body_class %}macro-study-page{% endblock %}{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='studies/macroeconomia_presidencial/styles.css') }}">
+<div class="macro-content">
+<a class="macro-back-link" href="{{ url_for('main.library') }}">← Voltar para Estudos e Biblioteca</a>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Navegação principal">
+      <div class="brand">
+        <div class="brand-seal">ME</div>
+        <div>
+          <strong>Gabinete Macroeconômico</strong>
+          <span>República de Aurora</span>
+        </div>
+      </div>
+
+      <nav class="nav-list">
+        <button class="nav-item active" data-target="situacao"><span>01</span>Sala de Situação</button>
+        <button class="nav-item" data-target="fluxo"><span>02</span>Fluxo de Capital</button>
+        <button class="nav-item" data-target="instrumentos"><span>03</span>Instrumentos de Governo</button>
+        <button class="nav-item" data-target="transmissao"><span>04</span>Como as decisões se propagam</button>
+        <button class="nav-item" data-target="indicadores"><span>05</span>Índices de Impacto</button>
+        <button class="nav-item" data-target="crises"><span>06</span>Gabinete de Crises</button>
+        <button class="nav-item" data-target="roteiro"><span>07</span>Plano dos 100 Dias</button>
+      </nav>
+
+      <div class="progress-card">
+        <span>Progresso de estudo</span>
+        <div class="progress-track"><div id="progressBar"></div></div>
+        <strong id="progressText">0% concluído</strong>
+      </div>
+    </aside>
+
+    <main>
+      <header class="topbar">
+        <div>
+          <span class="eyebrow">Centro de Comando Econômico</span>
+          <h1>Você assumiu a presidência hoje.</h1>
+          <p>Entenda o sistema antes de mover as alavancas.</p>
+        </div>
+        <div class="topbar-actions">
+          <button class="ghost-btn" id="openGlossary">Glossário</button>
+          <button class="primary-btn" data-target="instrumentos">Abrir simulador</button>
+        </div>
+      </header>
+
+      <section id="situacao" class="page-section active-section">
+        <div class="hero-grid">
+          <article class="hero-card">
+            <div class="hero-copy">
+              <span class="chapter-tag">Briefing nº 01</span>
+              <h2>Governar a economia é administrar fluxos, expectativas e limites.</h2>
+              <p>
+                Um presidente não “controla” diretamente inflação, câmbio, emprego ou crescimento.
+                O governo cria incentivos, define prioridades, coordena instituições e reage a choques.
+              </p>
+              <div class="principle-row">
+                <div><strong>Fluxos</strong><span>dinheiro, bens, crédito e impostos</span></div>
+                <div><strong>Estoques</strong><span>dívida, reservas, capital e patrimônio</span></div>
+                <div><strong>Expectativas</strong><span>confiança sobre o futuro</span></div>
+              </div>
+            </div>
+            <div class="hero-orbit" aria-hidden="true">
+              <div class="orbit orbit-a"></div>
+              <div class="orbit orbit-b"></div>
+              <div class="core">PIB</div>
+              <span class="satellite s1">Famílias</span>
+              <span class="satellite s2">Empresas</span>
+              <span class="satellite s3">Estado</span>
+              <span class="satellite s4">Exterior</span>
+            </div>
+          </article>
+        </div>
+
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">Painel inicial</span>
+            <h2>Os oito sinais vitais do país</h2>
+          </div>
+          <button class="text-btn explain-trigger" data-explain="vitals">Como interpretar juntos →</button>
+        </div>
+
+        <div class="kpi-grid" id="kpiGrid">
+          <article class="kpi-card" data-kpi="growth">
+            <div class="kpi-top"><span>Crescimento do PIB</span><b class="status neutral">moderado</b></div>
+            <strong id="kpiGrowth">2,2%</strong><small>atividade econômica</small>
+            <div class="mini-chart"><i style="height:36%"></i><i style="height:46%"></i><i style="height:42%"></i><i style="height:55%"></i><i style="height:60%"></i></div>
+          </article>
+          <article class="kpi-card" data-kpi="inflation">
+            <div class="kpi-top"><span>Inflação anual</span><b class="status warning">pressionada</b></div>
+            <strong id="kpiInflation">5,8%</strong><small>poder de compra</small>
+            <div class="meter"><span id="inflationMeter" style="width:58%"></span></div>
+          </article>
+          <article class="kpi-card" data-kpi="unemployment">
+            <div class="kpi-top"><span>Desemprego</span><b class="status warning">elevado</b></div>
+            <strong id="kpiUnemployment">8,2%</strong><small>mercado de trabalho</small>
+            <div class="meter"><span id="unemploymentMeter" style="width:55%"></span></div>
+          </article>
+          <article class="kpi-card" data-kpi="debt">
+            <div class="kpi-top"><span>Dívida / PIB</span><b class="status neutral">administrável</b></div>
+            <strong id="kpiDebt">67,0%</strong><small>espaço fiscal</small>
+            <div class="meter"><span id="debtMeter" style="width:67%"></span></div>
+          </article>
+          <article class="kpi-card" data-kpi="primary">
+            <div class="kpi-top"><span>Resultado primário</span><b class="status danger">déficit</b></div>
+            <strong id="kpiPrimary">−2,1%</strong><small>receita menos despesa, sem juros</small>
+          </article>
+          <article class="kpi-card" data-kpi="interest">
+            <div class="kpi-top"><span>Juro básico</span><b class="status neutral">restritivo</b></div>
+            <strong id="kpiInterest">9,5%</strong><small>custo-base do dinheiro</small>
+          </article>
+          <article class="kpi-card" data-kpi="exchange">
+            <div class="kpi-top"><span>Câmbio</span><b class="status warning">volátil</b></div>
+            <strong id="kpiExchange">A$ 4,80</strong><small>moeda local por dólar</small>
+          </article>
+          <article class="kpi-card" data-kpi="reserves">
+            <div class="kpi-top"><span>Reservas internacionais</span><b class="status success">robustas</b></div>
+            <strong id="kpiReserves">US$ 120 bi</strong><small>proteção externa</small>
+          </article>
+        </div>
+
+        <article class="presidential-note">
+          <div class="note-icon">!</div>
+          <div>
+            <strong>Regra presidencial nº 1</strong>
+            <p>Nunca interprete um indicador isoladamente. Crescimento alto com inflação alta pode ser superaquecimento. Inflação baixa com desemprego alto pode ser recessão.</p>
+          </div>
+        </article>
+      </section>
+
+      <section id="fluxo" class="page-section">
+        <div class="section-heading intro-heading">
+          <div>
+            <span class="eyebrow">Mapa sistêmico</span>
+            <h2>Como o capital circula em um país</h2>
+            <p>Clique em cada agente. As setas mostram quem paga, recebe, empresta, investe e tributa.</p>
+          </div>
+          <div class="flow-legend">
+            <span><i class="legend-dot real"></i>Economia real</span>
+            <span><i class="legend-dot financial"></i>Crédito e capital</span>
+            <span><i class="legend-dot public"></i>Fluxo público</span>
+          </div>
+        </div>
+
+        <div class="flow-layout">
+          <div class="flow-map" id="flowMap">
+            <svg viewBox="0 0 1000 610" role="img" aria-label="Fluxo circular da renda e do capital">
+              <defs>
+                <marker id="arrowReal" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" class="marker-real"/></marker>
+                <marker id="arrowFin" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" class="marker-fin"/></marker>
+                <marker id="arrowPub" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" class="marker-pub"/></marker>
+              </defs>
+
+              <g class="flow-lines">
+                <path class="flow-line real-line" d="M250,195 C355,115 405,110 500,115" marker-end="url(#arrowReal)"/><text x="350" y="112">consumo: A$ 470 bi</text>
+                <path class="flow-line real-line reverse" d="M505,170 C410,230 350,240 250,225" marker-end="url(#arrowReal)"/><text x="348" y="252">salários e lucros: A$ 520 bi</text>
+                <path class="flow-line public-line" d="M220,270 C250,345 285,385 375,420" marker-end="url(#arrowPub)"/><text x="210" y="365">tributos: A$ 210 bi</text>
+                <path class="flow-line public-line reverse" d="M415,400 C335,345 315,300 295,250" marker-end="url(#arrowPub)"/><text x="333" y="326">benefícios e serviços</text>
+                <path class="flow-line public-line" d="M585,210 C545,305 520,355 480,410" marker-end="url(#arrowPub)"/><text x="545" y="322">tributos: A$ 140 bi</text>
+                <path class="flow-line public-line reverse" d="M500,440 C560,365 610,310 635,225" marker-end="url(#arrowPub)"/><text x="600" y="375">compras e investimento</text>
+                <path class="flow-line financial-line" d="M248,168 C240,110 292,72 378,72" marker-end="url(#arrowFin)"/><text x="255" y="83">poupança: A$ 95 bi</text>
+                <path class="flow-line financial-line reverse" d="M392,98 C320,115 300,135 285,170" marker-end="url(#arrowFin)"/><text x="308" y="140">crédito</text>
+                <path class="flow-line financial-line" d="M500,90 C610,75 680,105 705,170" marker-end="url(#arrowFin)"/><text x="585" y="78">financiamento: A$ 130 bi</text>
+                <path class="flow-line financial-line reverse" d="M690,190 C630,155 565,140 510,140" marker-end="url(#arrowFin)"/><text x="610" y="153">juros e amortização</text>
+                <path class="flow-line real-line" d="M735,225 C800,260 840,300 845,360" marker-end="url(#arrowReal)"/><text x="792" y="273">importações</text>
+                <path class="flow-line real-line reverse" d="M830,385 C780,355 730,310 685,245" marker-end="url(#arrowReal)"/><text x="745" y="342">exportações</text>
+                <path class="flow-line financial-line" d="M485,72 C655,25 835,90 850,350" marker-end="url(#arrowFin)"/><text x="675" y="42">capital estrangeiro</text>
+                <path class="flow-line financial-line reverse" d="M810,385 C670,485 575,510 492,470" marker-end="url(#arrowFin)"/><text x="650" y="500">dívida e reservas</text>
+              </g>
+
+              <g class="flow-node active" data-node="familias" transform="translate(105,155)">
+                <rect width="170" height="105" rx="18"/><text x="85" y="42" text-anchor="middle" class="node-title">Famílias</text><text x="85" y="68" text-anchor="middle" class="node-sub">renda • consumo • poupança</text>
+              </g>
+              <g class="flow-node" data-node="bancos" transform="translate(370,30)">
+                <rect width="150" height="90" rx="18"/><text x="75" y="38" text-anchor="middle" class="node-title">Sistema financeiro</text><text x="75" y="62" text-anchor="middle" class="node-sub">depósitos • crédito</text>
+              </g>
+              <g class="flow-node" data-node="empresas" transform="translate(560,145)">
+                <rect width="190" height="105" rx="18"/><text x="95" y="42" text-anchor="middle" class="node-title">Empresas</text><text x="95" y="68" text-anchor="middle" class="node-sub">produção • emprego • investimento</text>
+              </g>
+              <g class="flow-node" data-node="governo" transform="translate(360,400)">
+                <rect width="180" height="105" rx="18"/><text x="90" y="42" text-anchor="middle" class="node-title">Governo</text><text x="90" y="68" text-anchor="middle" class="node-sub">tributos • gasto • dívida</text>
+              </g>
+              <g class="flow-node" data-node="exterior" transform="translate(780,350)">
+                <rect width="160" height="100" rx="18"/><text x="80" y="42" text-anchor="middle" class="node-title">Exterior</text><text x="80" y="67" text-anchor="middle" class="node-sub">comércio • capital • câmbio</text>
+              </g>
+              <g class="flow-node central" data-node="bc" transform="translate(70,420)">
+                <rect width="190" height="105" rx="18"/><text x="95" y="42" text-anchor="middle" class="node-title">Banco Central</text><text x="95" y="68" text-anchor="middle" class="node-sub">juros • moeda • reservas</text>
+              </g>
+            </svg>
+          </div>
+
+          <aside class="flow-detail" id="flowDetail">
+            <span class="chapter-tag">Agente selecionado</span>
+            <h3 id="flowTitle">Famílias</h3>
+            <p id="flowDescription">Recebem salários, benefícios e rendimentos; consomem, pagam impostos e formam poupança.</p>
+            <div class="flow-detail-grid">
+              <div><span>Entradas principais</span><strong id="flowInputs">salários, lucros, transferências</strong></div>
+              <div><span>Saídas principais</span><strong id="flowOutputs">consumo, tributos, poupança</strong></div>
+              <div><span>Risco macroeconômico</span><strong id="flowRisk">endividamento e perda de renda real</strong></div>
+            </div>
+            <div class="cabinet-question">
+              <span>Pergunta de gabinete</span>
+              <p id="flowQuestion">A renda está crescendo mais rápido ou mais devagar que os preços?</p>
+            </div>
+          </aside>
+        </div>
+
+        <div class="equation-strip">
+          <div><span>Identidade central</span><strong>PIB = C + I + G + (X − M)</strong></div>
+          <p><b>C</b> consumo das famílias · <b>I</b> investimento · <b>G</b> gasto público · <b>X−M</b> exportações líquidas</p>
+        </div>
+      </section>
+
+      <section id="instrumentos" class="page-section">
+        <div class="section-heading intro-heading">
+          <div>
+            <span class="eyebrow">Simulador educacional</span>
+            <h2>As alavancas que o Estado realmente possui</h2>
+            <p>Altere as decisões e observe efeitos prováveis. O modelo é didático: na vida real, os resultados dependem do contexto, da credibilidade e do tempo.</p>
+          </div>
+          <button class="ghost-btn" id="resetSimulation">Restaurar cenário</button>
+        </div>
+
+        <div class="simulator-grid">
+          <div class="policy-panel">
+            <div class="policy-group">
+              <div class="policy-header"><div><span>Política monetária</span><strong>Juro básico</strong></div><output id="interestOutput">9,5%</output></div>
+              <input type="range" id="interestRate" min="2" max="18" step="0.5" value="9.5" />
+              <p>Juros maiores tendem a reduzir crédito, consumo e inflação, mas também esfriam atividade e emprego.</p>
+            </div>
+
+            <div class="policy-group">
+              <div class="policy-header"><div><span>Política fiscal</span><strong>Investimento público</strong></div><output id="spendingOutput">4,0% do PIB</output></div>
+              <input type="range" id="publicSpending" min="2" max="8" step="0.25" value="4" />
+              <p>Obras e serviços elevam demanda e capacidade produtiva; sem financiamento sustentável, aumentam déficit e dívida.</p>
+            </div>
+
+            <div class="policy-group">
+              <div class="policy-header"><div><span>Arrecadação</span><strong>Carga tributária efetiva</strong></div><output id="taxOutput">31%</output></div>
+              <input type="range" id="taxRate" min="20" max="42" step="1" value="31" />
+              <p>Tributos financiam o Estado. Desenho ruim pode desestimular produção; desenho progressivo pode reduzir desigualdade.</p>
+            </div>
+
+            <div class="policy-group">
+              <div class="policy-header"><div><span>Liquidez</span><strong>Crescimento da moeda e do crédito</strong></div><output id="moneyOutput">7%</output></div>
+              <input type="range" id="moneyGrowth" min="0" max="20" step="1" value="7" />
+              <p>Mais liquidez facilita transações e crédito; excesso persistente sem produção correspondente pressiona preços e câmbio.</p>
+            </div>
+
+            <div class="policy-group">
+              <div class="policy-header"><div><span>Política cambial</span><strong>Uso de reservas</strong></div><output id="reserveOutput">neutro</output></div>
+              <input type="range" id="reserveAction" min="-30" max="30" step="5" value="0" />
+              <p>Vender dólares pode reduzir volatilidade no curto prazo; uso contínuo reduz o colchão de segurança externa.</p>
+            </div>
+
+            <div class="policy-group">
+              <div class="policy-header"><div><span>Ambiente institucional</span><strong>Confiança e previsibilidade</strong></div><output id="confidenceOutput">55 / 100</output></div>
+              <input type="range" id="confidence" min="20" max="90" step="5" value="55" />
+              <p>Regras estáveis, metas críveis e execução competente reduzem prêmio de risco e estimulam investimento.</p>
+            </div>
+          </div>
+
+          <div class="simulation-results">
+            <div class="result-header">
+              <div><span class="eyebrow">Projeção após 18 meses</span><h3 id="scenarioLabel">Equilíbrio instável</h3></div>
+              <div class="confidence-badge"><span>Confiança do modelo</span><strong>didática</strong></div>
+            </div>
+
+            <div class="result-grid">
+              <article><span>PIB</span><strong id="simGrowth">2,2%</strong><small id="deltaGrowth">cenário-base</small></article>
+              <article><span>Inflação</span><strong id="simInflation">5,8%</strong><small id="deltaInflation">cenário-base</small></article>
+              <article><span>Desemprego</span><strong id="simUnemployment">8,2%</strong><small id="deltaUnemployment">cenário-base</small></article>
+              <article><span>Dívida / PIB</span><strong id="simDebt">67,0%</strong><small id="deltaDebt">cenário-base</small></article>
+              <article><span>Câmbio</span><strong id="simExchange">A$ 4,80</strong><small id="deltaExchange">cenário-base</small></article>
+              <article><span>Reservas</span><strong id="simReserves">US$ 120 bi</strong><small id="deltaReserves">cenário-base</small></article>
+            </div>
+
+            <div class="impact-matrix">
+              <div class="matrix-title"><strong>Matriz de impacto</strong><span>efeito estimado por objetivo</span></div>
+              <div class="impact-row"><span>Crescimento sustentável</span><div class="impact-track"><i id="impactGrowth" style="width:55%"></i></div><b id="impactGrowthLabel">55</b></div>
+              <div class="impact-row"><span>Estabilidade de preços</span><div class="impact-track"><i id="impactPrices" style="width:48%"></i></div><b id="impactPricesLabel">48</b></div>
+              <div class="impact-row"><span>Emprego</span><div class="impact-track"><i id="impactJobs" style="width:50%"></i></div><b id="impactJobsLabel">50</b></div>
+              <div class="impact-row"><span>Solidez fiscal</span><div class="impact-track"><i id="impactFiscal" style="width:46%"></i></div><b id="impactFiscalLabel">46</b></div>
+              <div class="impact-row"><span>Resiliência externa</span><div class="impact-track"><i id="impactExternal" style="width:62%"></i></div><b id="impactExternalLabel">62</b></div>
+            </div>
+
+            <div class="advisor-box">
+              <div class="advisor-avatar">CM</div>
+              <div><span>Conselho de Ministros</span><p id="advisorText">A inflação está acima do confortável, enquanto o desemprego ainda é alto. Evite estimular a demanda sem elevar a capacidade produtiva.</p></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="transmissao" class="page-section">
+        <div class="section-heading intro-heading">
+          <div><span class="eyebrow">Mecanismos de transmissão</span><h2>Como uma decisão chega à vida das pessoas</h2><p>A política econômica trabalha por cadeias causais. O efeito final raramente é imediato.</p></div>
+        </div>
+
+        <div class="transmission-tabs" role="tablist">
+          <button class="transmission-tab active" data-chain="interest">Subir os juros</button>
+          <button class="transmission-tab" data-chain="investment">Investir em infraestrutura</button>
+          <button class="transmission-tab" data-chain="tax">Reduzir imposto sobre consumo</button>
+          <button class="transmission-tab" data-chain="currency">Moeda se desvaloriza</button>
+        </div>
+
+        <div class="causal-chain" id="causalChain"></div>
+
+        <article class="domestic-public-grid">
+          <div class="domestic-card">
+            <span class="chapter-tag">Economia doméstica</span>
+            <h3>O que acontece nas casas chega ao Tesouro.</h3>
+            <ul>
+              <li><b>Emprego e salários</b> alteram consumo, arrecadação e gasto com benefícios.</li>
+              <li><b>Endividamento familiar</b> pode sustentar consumo hoje e derrubá-lo amanhã.</li>
+              <li><b>Inflação</b> reduz renda real, muda hábitos e pressiona salários e assistência social.</li>
+              <li><b>Poupança</b> ajuda a financiar bancos, empresas e dívida pública.</li>
+            </ul>
+          </div>
+          <div class="bridge-visual">
+            <span>FAMÍLIAS</span><i></i><span>EMPRESAS</span><i></i><span>GOVERNO</span><i></i><span>MOEDA</span>
+          </div>
+          <div class="domestic-card accent-card">
+            <span class="chapter-tag">Moeda nacional</span>
+            <h3>A moeda resume confiança, produtividade e risco.</h3>
+            <ul>
+              <li>Mais exportações e capital entrando tendem a fortalecer a moeda.</li>
+              <li>Inflação, déficit externo e incerteza podem enfraquecê-la.</li>
+              <li>Moeda fraca encarece importados; pode favorecer exportadores.</li>
+              <li>O Banco Central reduz volatilidade, mas não elimina fundamentos.</li>
+            </ul>
+          </div>
+        </article>
+      </section>
+
+      <section id="indicadores" class="page-section">
+        <div class="section-heading intro-heading">
+          <div><span class="eyebrow">Painel de controle</span><h2>Como acompanhar os índices de impacto</h2><p>O governo deve estabelecer metas, faixas de alerta, responsáveis e respostas possíveis.</p></div>
+        </div>
+
+        <div class="indicator-table-wrap">
+          <table class="indicator-table">
+            <thead><tr><th>Indicador</th><th>O que revela</th><th>Sinal de alerta</th><th>Instrumentos relacionados</th><th>Erro comum</th></tr></thead>
+            <tbody>
+              <tr><td><strong>PIB real</strong></td><td>Volume produzido</td><td>Queda por dois ou mais trimestres</td><td>Investimento, crédito, reformas, comércio</td><td>Confundir PIB nominal com crescimento real</td></tr>
+              <tr><td><strong>Inflação</strong></td><td>Variação geral de preços</td><td>Expectativas se desancorando</td><td>Juros, fiscal, oferta, regulação</td><td>Tratar todo aumento de preço como mesma causa</td></tr>
+              <tr><td><strong>Desemprego</strong></td><td>Ociosidade e renda</td><td>Alta com queda de participação</td><td>Atividade, qualificação, ambiente de negócios</td><td>Olhar só a taxa e ignorar informalidade</td></tr>
+              <tr><td><strong>Dívida / PIB</strong></td><td>Capacidade de financiar o Estado</td><td>Juros reais acima do crescimento por muito tempo</td><td>Resultado fiscal, prazo da dívida, crescimento</td><td>Definir um número mágico sem contexto</td></tr>
+              <tr><td><strong>Conta corrente</strong></td><td>Relação com o exterior</td><td>Déficit alto financiado por capital volátil</td><td>Câmbio, exportação, energia, poupança</td><td>Celebrar capital entrando sem olhar sua qualidade</td></tr>
+              <tr><td><strong>Produtividade</strong></td><td>Produção por trabalhador/hora</td><td>Estagnação prolongada</td><td>Educação, infraestrutura, tecnologia, concorrência</td><td>Buscar crescimento apenas por estímulo à demanda</td></tr>
+              <tr><td><strong>Renda e desigualdade</strong></td><td>Distribuição do progresso</td><td>PIB cresce e renda mediana não</td><td>Tributos, transferências, serviços públicos</td><td>Usar apenas a média nacional</td></tr>
+              <tr><td><strong>Expectativas</strong></td><td>Decisões futuras de preços e investimento</td><td>Projeções pioram apesar dos anúncios</td><td>Credibilidade, comunicação, consistência</td><td>Achar que discurso substitui execução</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="control-cycle">
+          <article><span>1</span><strong>Defina o objetivo</strong><p>Ex.: inflação convergir para a meta sem recessão profunda.</p></article>
+          <article><span>2</span><strong>Escolha indicadores</strong><p>Use antecedentes, coincidentes e defasados.</p></article>
+          <article><span>3</span><strong>Estabeleça faixas</strong><p>Normal, atenção, alerta e emergência.</p></article>
+          <article><span>4</span><strong>Designe responsáveis</strong><p>Banco Central, Fazenda, Planejamento e reguladores.</p></article>
+          <article><span>5</span><strong>Revise a resposta</strong><p>Compare efeito esperado, realizado e efeitos colaterais.</p></article>
+        </div>
+      </section>
+
+      <section id="crises" class="page-section">
+        <div class="section-heading intro-heading">
+          <div><span class="eyebrow">Sala de guerra</span><h2>Treine decisões sob pressão</h2><p>Escolha uma crise, selecione a primeira resposta e veja os principais riscos.</p></div>
+        </div>
+
+        <div class="crisis-grid" id="crisisGrid">
+          <button class="crisis-card active" data-crisis="inflation"><span>01</span><strong>Choque de inflação</strong><p>Alimentos e energia sobem; expectativas pioram.</p></button>
+          <button class="crisis-card" data-crisis="recession"><span>02</span><strong>Recessão e desemprego</strong><p>Consumo cai, empresas cortam investimento.</p></button>
+          <button class="crisis-card" data-crisis="currency"><span>03</span><strong>Fuga de capital</strong><p>A moeda perde valor rapidamente.</p></button>
+          <button class="crisis-card" data-crisis="debt"><span>04</span><strong>Crise da dívida</strong><p>O mercado exige juros cada vez maiores.</p></button>
+        </div>
+
+        <div class="crisis-room">
+          <div class="crisis-brief">
+            <span class="chapter-tag">Memorando urgente</span>
+            <h3 id="crisisTitle">Choque de inflação com origem na oferta</h3>
+            <p id="crisisBrief">Uma seca derrubou a produção de alimentos, enquanto o petróleo subiu no exterior. A inflação anual saltou de 4% para 8%.</p>
+            <div class="crisis-data" id="crisisData"></div>
+          </div>
+          <div class="decision-panel">
+            <strong>Qual é sua primeira orientação?</strong>
+            <div id="decisionOptions" class="decision-options"></div>
+            <div id="decisionFeedback" class="decision-feedback"><span>Aguardando decisão presidencial.</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="roteiro" class="page-section">
+        <div class="section-heading intro-heading">
+          <div>
+            <span class="eyebrow">Formação executiva</span>
+            <h2>Seu plano presidencial dos primeiros 100 dias</h2>
+            <p>Um roteiro para diagnosticar o país, compreender as restrições institucionais, construir cenários, escolher prioridades e implantar uma rotina permanente de comando econômico.</p>
+          </div>
+        </div>
+
+        <div class="hundred-day-principles">
+          <article><span>01</span><strong>Diagnosticar antes de anunciar</strong><p>Primeiro descubra o que já está contratado, financiado, vencendo ou juridicamente protegido.</p></article>
+          <article><span>02</span><strong>Separar urgência de importância</strong><p>Crises de caixa e riscos bancários exigem resposta imediata; reformas estruturais exigem desenho e negociação.</p></article>
+          <article><span>03</span><strong>Declarar custos e compensações</strong><p>Toda decisão econômica transfere recursos, riscos ou renda entre grupos e períodos.</p></article>
+          <article><span>04</span><strong>Preservar credibilidade</strong><p>Metas realistas, dados transparentes e respeito às instituições reduzem juros, incerteza e volatilidade.</p></article>
+        </div>
+
+        <div class="timeline detailed-timeline">
+          <article>
+            <span>Dias 1–10</span>
+            <div>
+              <h3>Mapear o estado real do país</h3>
+              <p>Receba os dados consolidados de PIB, inflação, emprego, dívida, orçamento, reservas, bancos, comércio exterior e desigualdade. O objetivo não é decorar números, mas entender tendências, causas, riscos e relações entre eles.</p>
+              <div class="phase-deliverables"><b>Entregas:</b> painel nacional validado; lista de riscos imediatos; lacunas de dados; relatório de caixa dos próximos 90 dias.</div>
+              <label><input type="checkbox" class="study-check" /> Briefing nacional concluído</label>
+            </div>
+          </article>
+          <article>
+            <span>Dias 11–25</span>
+            <div>
+              <h3>Entender restrições, contratos e instituições</h3>
+              <p>Mapeie o mandato do Banco Central, as regras fiscais, os vencimentos da dívida, os contratos públicos, os subsídios existentes e os principais riscos jurídicos. Antes de prometer, saiba o que o Estado pode, deve e já se comprometeu a fazer.</p>
+              <div class="phase-deliverables"><b>Entregas:</b> mapa institucional; calendário de obrigações; inventário de contratos e subsídios; matriz de riscos jurídicos.</div>
+              <label><input type="checkbox" class="study-check" /> Mapa institucional concluído</label>
+            </div>
+          </article>
+          <article>
+            <span>Dias 26–45</span>
+            <div>
+              <h3>Construir o cenário-base e testar choques</h3>
+              <p>Projete três anos sem novas medidas e depois simule choques: juros internacionais maiores, queda das exportações, desvalorização cambial, seca, recessão, crise bancária e perda de arrecadação.</p>
+              <div class="phase-deliverables"><b>Entregas:</b> cenário central, otimista e adverso; teste de estresse fiscal e externo; hipóteses publicadas; gatilhos de contingência.</div>
+              <label><input type="checkbox" class="study-check" /> Cenário-base e testes de estresse aprovados</label>
+            </div>
+          </article>
+          <article>
+            <span>Dias 46–65</span>
+            <div>
+              <h3>Definir prioridades, metas e trade-offs</h3>
+              <p>Escolha de três a cinco objetivos mensuráveis. Cada prioridade deve declarar indicador, meta, prazo, custo fiscal, fonte de financiamento, responsável, beneficiários e efeitos colaterais.</p>
+              <div class="phase-deliverables"><b>Entregas:</b> matriz de prioridades; metas anuais; medidas de curto e médio prazo; lista explícita do que não será priorizado.</div>
+              <label><input type="checkbox" class="study-check" /> Prioridades e metas publicadas</label>
+            </div>
+          </article>
+          <article>
+            <span>Dias 66–85</span>
+            <div>
+              <h3>Alinhar política fiscal, monetária, financeira e produtiva</h3>
+              <p>Coordene Fazenda, Planejamento, Banco Central, bancos públicos, reguladores e ministérios setoriais. Evite políticas que se anulam ou transferem riscos ocultos para o futuro.</p>
+              <div class="phase-deliverables"><b>Entregas:</b> matriz de coordenação; sequência das medidas; avaliação de impacto distributivo; plano de comunicação econômica.</div>
+              <label><input type="checkbox" class="study-check" /> Matriz de coordenação concluída</label>
+            </div>
+          </article>
+          <article>
+            <span>Dias 86–100</span>
+            <div>
+              <h3>Implantar o sistema permanente de acompanhamento</h3>
+              <p>Institua reunião semanal de conjuntura, revisão mensal de indicadores, relatório bimestral de riscos e prestação trimestral de resultados. Cada desvio deve gerar responsável, prazo e ação corretiva.</p>
+              <div class="phase-deliverables"><b>Entregas:</b> calendário de governança; painel público; protocolo de crise; rotina de revisão de políticas e gastos.</div>
+              <label><input type="checkbox" class="study-check" /> Ritmo de gestão implantado</label>
+            </div>
+          </article>
+        </div>
+
+        <div class="agenda-heading">
+          <span class="eyebrow">Dias 1–10</span>
+          <h2>Dossiê do estado real da economia</h2>
+          <p>Abra cada tema como se fosse uma pasta entregue ao presidente. Em todos os casos, procure nível atual, tendência, composição, comparação histórica, causas e riscos.</p>
+        </div>
+
+        <div class="agenda-grid">
+          <details class="agenda-card" open>
+            <summary><span>01</span><div><strong>PIB e atividade econômica</strong><small>O tamanho, o ritmo e a composição da produção</small></div></summary>
+            <div class="agenda-body">
+              <p><b>O que dominar:</b> PIB nominal e real, crescimento trimestral e anual, PIB per capita, produtividade e contribuição de consumo, investimento, governo e setor externo.</p>
+              <h4>Peça ao gabinete</h4>
+              <ul><li>Série dos últimos dez anos e decomposição por setor: agropecuária, indústria e serviços.</li><li>Taxa de investimento, utilização da capacidade, estoques, crédito e confiança empresarial.</li><li>Diferenças regionais e setores que mais criam ou destroem valor.</li></ul>
+              <h4>Perguntas presidenciais</h4>
+              <ul><li>O crescimento vem de produtividade e investimento ou apenas de consumo e gasto?</li><li>Quais setores estão em recessão mesmo com o PIB agregado crescendo?</li><li>Quanto do crescimento depende de crédito, commodities ou estímulos temporários?</li></ul>
+              <div class="signal-box"><b>Sinais de alerta:</b> dois trimestres de queda, investimento fraco, produtividade parada, expansão sustentada apenas por dívida ou estoques.</div>
+              <div class="delivery-box"><b>Entrega do dia 10:</b> mapa das fontes de crescimento e três gargalos que limitam a capacidade produtiva.</div>
+              <label><input type="checkbox" class="study-check" /> Dossiê de PIB revisado</label>
+            </div>
+          </details>
+
+          <details class="agenda-card">
+            <summary><span>02</span><div><strong>Inflação e custo de vida</strong><small>Onde os preços sobem e por quê</small></div></summary>
+            <div class="agenda-body">
+              <p><b>O que dominar:</b> inflação cheia, núcleos, preços administrados, alimentos, energia, serviços, bens, expectativas e diferenças por faixa de renda.</p>
+              <h4>Peça ao gabinete</h4>
+              <ul><li>Inflação mensal e acumulada, difusão dos aumentos e comparação com a meta.</li><li>Separação entre choques de oferta, excesso de demanda, câmbio, salários e inércia.</li><li>Impacto da inflação na cesta das famílias pobres e nos contratos indexados.</li></ul>
+              <h4>Perguntas presidenciais</h4>
+              <ul><li>O choque é temporário ou está contaminando expectativas e salários?</li><li>Quais preços o governo influencia diretamente e quais não controla?</li><li>Uma resposta fiscal ajudará a oferta ou apenas ampliará a demanda?</li></ul>
+              <div class="signal-box"><b>Sinais de alerta:</b> núcleos elevados, serviços acelerando, expectativas desancoradas, reajustes generalizados e inflação de alimentos persistente.</div>
+              <div class="delivery-box"><b>Entrega do dia 10:</b> diagnóstico das causas e plano coordenado que não substitua indevidamente a política monetária.</div>
+              <label><input type="checkbox" class="study-check" /> Dossiê de inflação revisado</label>
+            </div>
+          </details>
+
+          <details class="agenda-card">
+            <summary><span>03</span><div><strong>Emprego, renda e produtividade</strong><small>Quantidade e qualidade do trabalho</small></div></summary>
+            <div class="agenda-body">
+              <p><b>O que dominar:</b> desemprego, participação, subocupação, informalidade, salários reais, criação líquida de vagas, produtividade e qualificação.</p>
+              <h4>Peça ao gabinete</h4>
+              <ul><li>Dados por idade, sexo, região, escolaridade e setor.</li><li>Tempo médio de procura por trabalho e proporção de trabalhadores desalentados.</li><li>Evolução da renda mediana, massa salarial, rotatividade e custo de contratação.</li></ul>
+              <h4>Perguntas presidenciais</h4>
+              <ul><li>O desemprego caiu porque houve contratação ou porque pessoas desistiram de procurar?</li><li>Os salários reais crescem com produtividade ou pressionam custos sem ganho de produção?</li><li>Quais qualificações faltam nos setores que desejam contratar?</li></ul>
+              <div class="signal-box"><b>Sinais de alerta:</b> queda da participação, informalidade crescente, desemprego jovem elevado, renda real em queda e produtividade estagnada.</div>
+              <div class="delivery-box"><b>Entrega do dia 10:</b> mapa de emprego e renda com ações emergenciais, qualificação e redução de barreiras à contratação formal.</div>
+              <label><input type="checkbox" class="study-check" /> Dossiê de emprego revisado</label>
+            </div>
+          </details>
+
+          <details class="agenda-card">
+            <summary><span>04</span><div><strong>Dívida pública</strong><small>Volume, custo, moeda e prazos</small></div></summary>
+            <div class="agenda-body">
+              <p><b>O que dominar:</b> dívida bruta e líquida, relação dívida/PIB, custo médio, indexadores, moeda, detentores, prazo médio e necessidade de financiamento.</p>
+              <h4>Peça ao gabinete</h4>
+              <ul><li>Perfil completo por vencimento, juros fixos, flutuantes, inflação e câmbio.</li><li>Projeções da dívida sob diferentes hipóteses de crescimento, juros, câmbio e resultado primário.</li><li>Participação de investidores domésticos, estrangeiros, bancos, fundos e Banco Central.</li></ul>
+              <h4>Perguntas presidenciais</h4>
+              <ul><li>A dívida cresce porque há déficit primário, juros altos, câmbio ou baixo crescimento?</li><li>Quanto precisa ser refinanciado nos próximos 30, 90 e 365 dias?</li><li>O Tesouro consegue alongar prazos sem pagar prêmio excessivo?</li></ul>
+              <div class="signal-box"><b>Sinais de alerta:</b> vencimentos concentrados, dívida externa sem proteção, aumento rápido do custo, dependência de compradores de curto prazo e perda de liquidez.</div>
+              <div class="delivery-box"><b>Entrega do dia 10:</b> estratégia de financiamento e limites de risco para prazo, moeda e indexadores.</div>
+              <label><input type="checkbox" class="study-check" /> Dossiê da dívida revisado</label>
+            </div>
+          </details>
+
+          <details class="agenda-card">
+            <summary><span>05</span><div><strong>Orçamento e posição fiscal</strong><small>Receitas, despesas, caixa e compromissos</small></div></summary>
+            <div class="agenda-body">
+              <p><b>O que dominar:</b> resultado primário e nominal, receitas recorrentes, despesas obrigatórias e discricionárias, restos a pagar, renúncias, fundos e empresas públicas.</p>
+              <h4>Peça ao gabinete</h4>
+              <ul><li>Fluxo de caixa semanal dos próximos três meses e mensal do ano.</li><li>Despesas por função, programa, beneficiário e grau de rigidez legal.</li><li>Receitas extraordinárias separadas das permanentes e passivos fora do orçamento.</li></ul>
+              <h4>Perguntas presidenciais</h4>
+              <ul><li>Qual parte do orçamento pode ser realmente alterada neste exercício?</li><li>Quais despesas crescem automaticamente e quais programas não entregam resultados?</li><li>Há atrasos, precatórios, garantias ou obrigações escondidas?</li></ul>
+              <div class="signal-box"><b>Sinais de alerta:</b> falta de caixa, receitas superestimadas, despesas subestimadas, uso recorrente de receitas extraordinárias e expansão de gastos permanentes sem fonte.</div>
+              <div class="delivery-box"><b>Entrega do dia 10:</b> orçamento reestimado, plano de contingenciamento e lista de despesas que merecem revisão de eficiência.</div>
+              <label><input type="checkbox" class="study-check" /> Dossiê orçamentário revisado</label>
+            </div>
+          </details>
+
+          <details class="agenda-card">
+            <summary><span>06</span><div><strong>Reservas internacionais e posição externa</strong><small>O colchão do país contra choques cambiais</small></div></summary>
+            <div class="agenda-body">
+              <p><b>O que dominar:</b> volume, liquidez, composição, cobertura de importações, dívida externa de curto prazo e adequação frente a saídas de capital.</p>
+              <h4>Peça ao gabinete</h4>
+              <ul><li>Reservas líquidas, ativos comprometidos e critérios de liquidez e risco.</li><li>Meses de importação cobertos e relação com obrigações externas de curto prazo.</li><li>Testes de fuga de capital e desvalorização em diferentes intensidades.</li></ul>
+              <h4>Perguntas presidenciais</h4>
+              <ul><li>Quanto está disponível para uso imediato sem comprometer a segurança?</li><li>O problema cambial é falta de liquidez, desequilíbrio fiscal ou perda de confiança?</li><li>A intervenção reduzirá volatilidade ou tentará defender um preço insustentável?</li></ul>
+              <div class="signal-box"><b>Sinais de alerta:</b> reservas ilíquidas, obrigações externas próximas, déficit externo alto e redução acelerada para sustentar artificialmente o câmbio.</div>
+              <div class="delivery-box"><b>Entrega do dia 10:</b> política de uso das reservas com objetivos, limites, governança e comunicação.</div>
+              <label><input type="checkbox" class="study-check" /> Dossiê de reservas revisado</label>
+            </div>
+          </details>
+
+          <details class="agenda-card">
+            <summary><span>07</span><div><strong>Bancos e estabilidade financeira</strong><small>Crédito, liquidez, solvência e contágio</small></div></summary>
+            <div class="agenda-body">
+              <p><b>O que dominar:</b> capitalização, liquidez, inadimplência, concentração, exposição a governo, imóveis, câmbio e setores vulneráveis.</p>
+              <h4>Peça ao gabinete</h4>
+              <ul><li>Testes de estresse do sistema e lista de instituições sistemicamente importantes.</li><li>Qualidade dos ativos, provisões, depósitos, captação e descasamentos de prazo e moeda.</li><li>Exposição de bancos públicos e garantias explícitas ou implícitas do governo.</li></ul>
+              <h4>Perguntas presidenciais</h4>
+              <ul><li>Uma instituição em dificuldade é ilíquida ou insolvente?</li><li>Qual é o risco de corrida bancária, contágio ou congelamento do crédito?</li><li>Como proteger depositantes sem premiar acionistas e gestores imprudentes?</li></ul>
+              <div class="signal-box"><b>Sinais de alerta:</b> retirada rápida de depósitos, aumento da inadimplência, ativos superavaliados, exposição concentrada e crescimento excessivo do crédito.</div>
+              <div class="delivery-box"><b>Entrega do dia 10:</b> protocolo de crise financeira, linhas de liquidez e regras para intervenção, resolução e proteção de depositantes.</div>
+              <label><input type="checkbox" class="study-check" /> Dossiê bancário revisado</label>
+            </div>
+          </details>
+
+          <details class="agenda-card">
+            <summary><span>08</span><div><strong>Comércio exterior e câmbio</strong><small>Exportações, importações, competitividade e dependências</small></div></summary>
+            <div class="agenda-body">
+              <p><b>O que dominar:</b> balança comercial, conta corrente, termos de troca, concentração de mercados, cadeias importadas e elasticidade ao câmbio.</p>
+              <h4>Peça ao gabinete</h4>
+              <ul><li>Produtos e destinos que concentram exportações e itens críticos de importação.</li><li>Custos logísticos, tarifas, acordos comerciais, barreiras sanitárias e prazos aduaneiros.</li><li>Dependência de energia, fertilizantes, medicamentos, semicondutores e bens de capital.</li></ul>
+              <h4>Perguntas presidenciais</h4>
+              <ul><li>Uma desvalorização aumenta exportações ou apenas encarece insumos e inflação?</li><li>Quais setores têm vantagem real e quais sobrevivem apenas com proteção permanente?</li><li>O país possui mercados alternativos caso um parceiro reduza compras?</li></ul>
+              <div class="signal-box"><b>Sinais de alerta:</b> exportações muito concentradas, déficit externo financiado por capital volátil, gargalos logísticos e dependência de insumos essenciais.</div>
+              <div class="delivery-box"><b>Entrega do dia 10:</b> mapa de vulnerabilidade externa e agenda de diversificação de produtos, mercados e fornecedores.</div>
+              <label><input type="checkbox" class="study-check" /> Dossiê de comércio exterior revisado</label>
+            </div>
+          </details>
+
+          <details class="agenda-card">
+            <summary><span>09</span><div><strong>Desigualdade, pobreza e mobilidade</strong><small>Quem recebe os benefícios e suporta os custos</small></div></summary>
+            <div class="agenda-body">
+              <p><b>O que dominar:</b> renda mediana, pobreza, extrema pobreza, distribuição regional, acesso a serviços, patrimônio, mobilidade social e incidência de tributos e gastos.</p>
+              <h4>Peça ao gabinete</h4>
+              <ul><li>Renda e custo de vida por décimo da população, região e tipo de família.</li><li>Quem paga cada tributo e quem recebe cada benefício, subsídio e serviço público.</li><li>Indicadores de educação, saúde, moradia, saneamento, segurança alimentar e acesso digital.</li></ul>
+              <h4>Perguntas presidenciais</h4>
+              <ul><li>O crescimento aumenta a renda mediana ou fica concentrado no topo?</li><li>Os programas alcançam quem precisa e criam caminhos de autonomia?</li><li>Quais reformas melhoram igualdade sem reduzir emprego, formalização e investimento?</li></ul>
+              <div class="signal-box"><b>Sinais de alerta:</b> renda mediana estagnada, pobreza infantil elevada, benefícios regressivos, serviços básicos desiguais e baixa mobilidade.</div>
+              <div class="delivery-box"><b>Entrega do dia 10:</b> painel distributivo obrigatório para avaliar quem ganha e quem perde em cada política.</div>
+              <label><input type="checkbox" class="study-check" /> Dossiê distributivo revisado</label>
+            </div>
+          </details>
+        </div>
+
+        <div class="agenda-heading institutional-heading">
+          <span class="eyebrow">Dias 11–25</span>
+          <h2>Dossiê de restrições institucionais e compromissos do Estado</h2>
+          <p>Esses temas definem o espaço real de decisão. Ignorá-los pode transformar uma boa intenção em crise fiscal, perda de confiança ou derrota judicial.</p>
+        </div>
+
+        <div class="agenda-grid institutional-grid">
+          <details class="agenda-card">
+            <summary><span>10</span><div><strong>Mandato do Banco Central</strong><small>Objetivos, autonomia, instrumentos e prestação de contas</small></div></summary>
+            <div class="agenda-body">
+              <p><b>O que dominar:</b> objetivos legais, regime de metas, autonomia operacional, nomeações, mandatos, instrumentos monetários, supervisão bancária e limites de financiamento ao governo.</p>
+              <h4>Verifique</h4>
+              <ul><li>Quem define a meta e quem escolhe os instrumentos para alcançá-la.</li><li>Como são nomeados e removidos dirigentes e quais decisões exigem colegiado.</li><li>Quais relatórios, atas, cartas e audiências garantem transparência.</li></ul>
+              <h4>Perguntas presidenciais</h4>
+              <ul><li>Como o governo pode coordenar políticas sem pressionar decisões técnicas?</li><li>O Banco Central também possui mandato de emprego ou estabilidade financeira?</li><li>Quais ações pertencem ao Executivo e quais seriam interferência indevida?</li></ul>
+              <div class="signal-box"><b>Risco central:</b> perda de autonomia percebida pode desancorar expectativas, pressionar câmbio e elevar o custo da dívida.</div>
+              <div class="delivery-box"><b>Entrega até o dia 25:</b> protocolo público de coordenação e respeito às competências institucionais.</div>
+              <label><input type="checkbox" class="study-check" /> Mandato do Banco Central compreendido</label>
+            </div>
+          </details>
+
+          <details class="agenda-card">
+            <summary><span>11</span><div><strong>Regras fiscais</strong><small>Limites, metas, exceções e mecanismos de correção</small></div></summary>
+            <div class="agenda-body">
+              <p><b>O que dominar:</b> metas de resultado, limites de despesa e dívida, vinculações, pisos constitucionais, gatilhos, cláusulas de escape e sanções.</p>
+              <h4>Verifique</h4>
+              <ul><li>Quais regras valem para governo central, estados, municípios e empresas públicas.</li><li>Como são tratadas recessões, calamidades e despesas extraordinárias.</li><li>Quais correções entram automaticamente quando uma meta é descumprida.</li></ul>
+              <h4>Perguntas presidenciais</h4>
+              <ul><li>A regra é simples, verificável e compatível com o ciclo econômico?</li><li>Ela controla apenas o orçamento visível ou também créditos, garantias e fundos?</li><li>Há espaço para investimento sem permitir gasto corrente permanente sem financiamento?</li></ul>
+              <div class="signal-box"><b>Risco central:</b> uma regra repetidamente contornada perde credibilidade mesmo antes de ser formalmente revogada.</div>
+              <div class="delivery-box"><b>Entrega até o dia 25:</b> relatório de conformidade e plano de correção compatível com crescimento e proteção social.</div>
+              <label><input type="checkbox" class="study-check" /> Regras fiscais mapeadas</label>
+            </div>
+          </details>
+
+          <details class="agenda-card">
+            <summary><span>12</span><div><strong>Vencimentos e refinanciamento da dívida</strong><small>O calendário que pode transformar solvência em crise de liquidez</small></div></summary>
+            <div class="agenda-body">
+              <p><b>O que dominar:</b> amortizações, juros, leilões, concentração mensal, moeda, indexadores, investidores e condições de mercado.</p>
+              <h4>Verifique</h4>
+              <ul><li>Calendário diário dos próximos 90 dias e mensal dos próximos três anos.</li><li>Disponibilidade de caixa e linhas de contingência para janelas adversas.</li><li>Percentual que vence em moeda estrangeira ou depende de juros flutuantes.</li></ul>
+              <h4>Perguntas presidenciais</h4>
+              <ul><li>Qual é o pior mês e qual plano existe se um leilão tiver baixa demanda?</li><li>É possível trocar títulos curtos por longos sem custo excessivo?</li><li>Quais mensagens ou medidas podem provocar retirada de investidores?</li></ul>
+              <div class="signal-box"><b>Risco central:</b> mesmo um país solvente pode enfrentar crise se não conseguir rolar vencimentos concentrados.</div>
+              <div class="delivery-box"><b>Entrega até o dia 25:</b> calendário de financiamento, reservas de liquidez e plano de comunicação com investidores.</div>
+              <label><input type="checkbox" class="study-check" /> Vencimentos da dívida revisados</label>
+            </div>
+          </details>
+
+          <details class="agenda-card">
+            <summary><span>13</span><div><strong>Contratos, concessões e parcerias</strong><small>Direitos, obrigações, reajustes e passivos contingentes</small></div></summary>
+            <div class="agenda-body">
+              <p><b>O que dominar:</b> contratos de compras, obras, concessões, parcerias público-privadas, garantias, reajustes, reequilíbrios e multas.</p>
+              <h4>Verifique</h4>
+              <ul><li>Valor total, duração, responsável, fonte de pagamento e indicadores de desempenho.</li><li>Cláusulas de reajuste, moeda, demanda mínima, garantias e término antecipado.</li><li>Pedidos de reequilíbrio, atrasos, arbitragens e litígios em andamento.</li></ul>
+              <h4>Perguntas presidenciais</h4>
+              <ul><li>Quais contratos geram pagamentos obrigatórios mesmo sem uso do serviço?</li><li>Quais podem ser renegociados e quais mudanças gerariam indenização?</li><li>O risco foi realmente transferido ao privado ou permanece com o Estado?</li></ul>
+              <div class="signal-box"><b>Risco central:</b> cancelamentos políticos podem gerar indenizações maiores que a economia pretendida e paralisar investimentos.</div>
+              <div class="delivery-box"><b>Entrega até o dia 25:</b> inventário contratual, ranking de risco e plano técnico de renegociação ou fiscalização.</div>
+              <label><input type="checkbox" class="study-check" /> Contratos estratégicos inventariados</label>
+            </div>
+          </details>
+
+          <details class="agenda-card">
+            <summary><span>14</span><div><strong>Subsídios, benefícios e renúncias</strong><small>Quem recebe, quanto custa e qual resultado entrega</small></div></summary>
+            <div class="agenda-body">
+              <p><b>O que dominar:</b> subsídios orçamentários, crédito favorecido, garantias, isenções, tarifas reduzidas, preços controlados e benefícios tributários.</p>
+              <h4>Verifique</h4>
+              <ul><li>Custo anual, prazo, fundamento legal, beneficiários e concentração por setor ou renda.</li><li>Objetivo original, indicadores de desempenho e evidência de adicionalidade.</li><li>Custo de oportunidade: qual programa deixa de ser financiado para manter o benefício.</li></ul>
+              <h4>Perguntas presidenciais</h4>
+              <ul><li>O investimento aconteceria mesmo sem o subsídio?</li><li>O benefício é temporário, revisável e transparente?</li><li>Há captura por grupos organizados ou concentração em empresas dominantes?</li></ul>
+              <div class="signal-box"><b>Risco central:</b> subsídios pequenos isoladamente podem formar grande gasto permanente e difícil de retirar.</div>
+              <div class="delivery-box"><b>Entrega até o dia 25:</b> orçamento de subsídios, critérios de revisão e cronograma de avaliação, redução ou focalização.</div>
+              <label><input type="checkbox" class="study-check" /> Subsídios e renúncias avaliados</label>
+            </div>
+          </details>
+
+          <details class="agenda-card">
+            <summary><span>15</span><div><strong>Riscos jurídicos e passivos contingentes</strong><small>O custo potencial que ainda não aparece plenamente no orçamento</small></div></summary>
+            <div class="agenda-body">
+              <p><b>O que dominar:</b> ações judiciais, precatórios, arbitragens, garantias, disputas tributárias, passivos previdenciários, ambientais e trabalhistas.</p>
+              <h4>Verifique</h4>
+              <ul><li>Probabilidade de perda, valor estimado, prazo e impacto sobre caixa e dívida.</li><li>Decisões judiciais repetitivas que possam alcançar grande número de pessoas.</li><li>Medidas econômicas planejadas que exigem lei, regulamentação ou respeito a direitos adquiridos.</li></ul>
+              <h4>Perguntas presidenciais</h4>
+              <ul><li>Qual decisão pode gerar efeito retroativo ou obrigação bilionária?</li><li>O governo possui provisão, estratégia processual e possibilidade de acordo?</li><li>Quais anúncios não devem ocorrer antes de análise constitucional e contratual?</li></ul>
+              <div class="signal-box"><b>Risco central:</b> tratar uma obrigação provável como inexistente melhora artificialmente o orçamento atual e transfere a crise para o futuro.</div>
+              <div class="delivery-box"><b>Entrega até o dia 25:</b> matriz de probabilidade e impacto, provisões e protocolo de análise jurídica prévia das medidas econômicas.</div>
+              <label><input type="checkbox" class="study-check" /> Riscos jurídicos classificados</label>
+            </div>
+          </details>
+        </div>
+
+        <div class="days-26-100">
+          <div class="agenda-heading">
+            <span class="eyebrow">Dias 26–100</span>
+            <h2>Como transformar diagnóstico em governo</h2>
+          </div>
+          <div class="execution-grid">
+            <article><span>26–45</span><strong>Cenário-base</strong><p>Use hipóteses comuns para PIB, inflação, juros, câmbio, receitas e despesas. Exija memória de cálculo e mostre o que acontece sem novas medidas.</p><ul><li>Cenário central, otimista e adverso.</li><li>Choques fiscais, bancários e externos.</li><li>Gatilhos para contingenciamento e resposta.</li></ul></article>
+            <article><span>46–65</span><strong>Carteira de prioridades</strong><p>Converta promessas em metas operacionais com custo, fonte, prazo e responsável.</p><ul><li>Até cinco prioridades nacionais.</li><li>Indicador de resultado e impacto distributivo.</li><li>Sequência política e legislativa.</li></ul></article>
+            <article><span>66–85</span><strong>Coordenação econômica</strong><p>Teste se as políticas fiscal, monetária, cambial, creditícia e regulatória apontam para objetivos compatíveis.</p><ul><li>Matriz de efeitos cruzados.</li><li>Riscos de anulação ou duplicidade.</li><li>Comunicação única, sem promessas contraditórias.</li></ul></article>
+            <article><span>86–100</span><strong>Sistema de gestão</strong><p>Crie uma rotina em que dados geram decisões, decisões têm responsáveis e resultados são revistos.</p><ul><li>Reunião semanal de conjuntura.</li><li>Revisão mensal e painel público.</li><li>Prestação trimestral e correções.</li></ul></article>
+          </div>
+        </div>
+
+        <div class="presidential-checklist">
+          <div>
+            <span class="eyebrow">Antes de aprovar qualquer medida</span>
+            <h2>As oito perguntas obrigatórias</h2>
+          </div>
+          <ol>
+            <li>Qual problema mensurável esta medida resolve?</li>
+            <li>Quem recebe o benefício e quem suporta o custo?</li>
+            <li>O impacto é temporário ou permanente?</li>
+            <li>Qual é a fonte de financiamento?</li>
+            <li>O que acontece com inflação, emprego, dívida e câmbio?</li>
+            <li>Há competência legal, contrato ou direito adquirido envolvido?</li>
+            <li>Como o resultado será medido e quando a política será revista?</li>
+            <li>Qual é o plano de saída se a medida falhar?</li>
+          </ol>
+        </div>
+
+        <div class="final-doctrine">
+          <div><span class="eyebrow">Doutrina de governo</span><h2>Estabilidade sem estagnação. Crescimento sem irresponsabilidade. Proteção social sem perder capacidade de financiamento.</h2></div>
+          <button class="primary-btn" id="markAll">Marcar plano como concluído</button>
+        </div>
+      </section>
+      <footer>
+        <span>Gabinete Macroeconômico · Material educacional</span>
+        <p>Os cálculos do simulador são simplificações pedagógicas, não previsões econômicas nem recomendações de política pública.</p>
+      </footer>
+    </main>
+  </div>
+
+  <dialog id="infoDialog">
+    <button class="dialog-close" aria-label="Fechar">×</button>
+    <span class="chapter-tag" id="dialogTag">Nota técnica</span>
+    <h2 id="dialogTitle">Como interpretar</h2>
+    <div id="dialogBody"></div>
+  </dialog>
+
+  <dialog id="glossaryDialog">
+    <button class="dialog-close" aria-label="Fechar">×</button>
+    <span class="chapter-tag">Consulta rápida</span>
+    <h2>Glossário presidencial</h2>
+    <input type="search" id="glossarySearch" placeholder="Buscar termo: PIB, inflação, dívida..." />
+    <div class="glossary-list" id="glossaryList"></div>
+  </dialog>
+
+  <script src="{{ url_for('static', filename='studies/macroeconomia_presidencial/app.js') }}"></script>
+</div>
+{% endblock %}

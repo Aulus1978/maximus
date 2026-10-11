@@ -302,6 +302,11 @@ def library():
     return render_template("library.html",studies=studies)
 
 
+@bp.get("/biblioteca/macroeconomia-presidencial")
+def presidential_macroeconomics():
+    return render_template("studies/macroeconomia_presidencial/index.html")
+
+
 @bp.route("/biblioteca/guias-rapidos", methods=("GET", "POST"))
 def quick_guides():
     if request.method == "POST":
